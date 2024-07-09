@@ -136,6 +136,8 @@ workflows:
                 message: Release psk-platform-simple-teams-and-ns hosted-zones
                 include-link: true
                 include-tag: true
+          requires:
+             - approve hosted-zones change plan
           filters: *on-push-main
 
       # deploy sbx preview config
