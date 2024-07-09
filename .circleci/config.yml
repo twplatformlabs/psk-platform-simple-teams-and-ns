@@ -126,7 +126,7 @@ workflows:
             - set-environment:
                 account: multiaccount
           after-apply:
-            - integration-tests:
+            - host-zone-integration-test:
                 account: multiaccount
             - do/slack-bot:
                 channel: lab-events
