@@ -40,6 +40,9 @@ commands:
 
   host-zone-integration-test:
     description: generate environment credentials and configuration from templates
+    parameters:
+      account:
+        type: string
     steps:
       - run:
           name: integration test nonprod account
