@@ -1,0 +1,158 @@
+---
+version: 2.1
+
+orbs:
+  terraform: twdps/terraform@3.0.1
+  op: twdps/onepassword@3.0.0
+  do: twdps/pipeline-events@4.1.0
+
+globals:
+  - &context empc-lab
+  - &executor-image twdps/circleci-infra-aws:alpine-7.5.0
+
+on-push-main: &on-push-main
+  branches:
+    only: /main/
+  tags:
+    ignore: /.*/
+
+on-tag-main: &on-tag-main
+  branches:
+    ignore: /.*/
+  tags:
+    only: /.*/
+
+commands:
+
+  set-environment:
+    description: generate environment credentials and configuration from templates
+    parameters:
+      account:
+        type: string
+    steps:
+      - op/env:
+          env-file: op.<< parameters.account >>.env
+      - op/tpl:
+          tpl-path: environments
+          tpl-file: << parameters.account >>.auto.tfvars.json
+      - terraform/terraformrc
+      - do/bash-functions
+
+  # integration-tests:
+  #   parameters:
+  #     account:
+  #       type: string
+  #   steps:
+  #     - run:
+  #         name: integration test nonprod account
+  #         command: bash scripts/hosted_zone_test.sh << parameters.account >> nonprod
+  #     - run:
+  #         name: integration test prod account
+  #         command: bash scripts/hosted_zone_test.sh << parameters.account >> prod
+
+# jobs:
+
+#   deploy simple teams and ns:
+#     docker:
+#       - image: *executor-image
+#     parameters:
+#       cluster:
+#         description: cluster name
+#         type: string
+#     steps:
+#       - checkout
+#       - set-environment:
+#           cluster: << parameters.cluster >>
+
+
+#       - run:
+#           name: install external-dns
+#           command: bash scripts/install_external_dns.sh << parameters.cluster >>
+
+#       - run:
+#           name: deploy cluster certificate issuer
+#           command: |
+#             bash scripts/define_certificate_issuer.sh << parameters.cluster >>
+#             bash scripts/deploy_certificate_issuer.sh << parameters.cluster >>
+
+#       - run:
+#           name: deploy cluster defautl gateways
+#           command: bash scripts/deploy_gateways.sh << parameters.cluster >>
+
+#       - run-integration-tests:
+#            cluster: << parameters.cluster >>
+
+workflows:
+  version: 2
+
+  hosted-zones and preview environment configuration:
+    jobs:
+      - terraform/static-analysis:
+          name: static code analysis
+          context: *context
+          executor-image: *executor-image
+          workspace: state
+          tflint-scan: true
+          tflint-provider: aws
+          trivy-scan: true
+          before-static-analysis:
+            - op/env:
+                env-file: op.multiaccount.env
+          filters: *on-push-main
+
+      - terraform/plan:
+          name: hosted-zones change plan
+          context: *context
+          executor-image: *executor-image
+          workspace: state
+          checkov-scan: true
+          before-plan:
+            - set-environment:
+                account: multiaccount
+          filters: *on-push-main
+
+      # - approve:
+      #     name: approve teardown prod
+      #     type: approval
+      #     filters: *on-push-main
+
+      # approve plan
+
+      # deploy route53 zone configuration
+
+      # deploy sbx preview config
+
+  # standard enviro:
+  #   jobs:
+  #     - terraform/apply:
+  #         name: hosted-zones release
+  #         context: *context
+  #         workspace: state
+  #         before-apply:
+  #           - set-environment:
+  #               account: multiaccount
+  #         after-apply:
+  #           - integration-tests:
+  #               account: multiaccount
+  #           - do/slack-bot:
+  #               channel: lab-events
+  #               message: Release psk-aws-platform-hosted-zones
+  #               include-link: true
+  #               include-tag: true
+  #         filters: *on-tag-main
+
+      # apply cluster configuration
+      # - external-dns instances
+      # - gateways/certificates
+      # - namespaces with quotas for list of teams, only need be prod for this example
+
+      # - do/release:
+      #     name: generate release notes
+      #     context: *context
+      #     on-tag: true
+      #     before-release:
+      #       - op/env:
+      #           env-file: op.env
+      #     requires:
+      #       - hosted-zones release
+      #     filters: *on-tag-main
