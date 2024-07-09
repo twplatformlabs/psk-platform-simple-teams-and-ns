@@ -38,17 +38,15 @@ commands:
       - terraform/terraformrc
       - do/bash-functions
 
-  # integration-tests:
-  #   parameters:
-  #     account:
-  #       type: string
-  #   steps:
-  #     - run:
-  #         name: integration test nonprod account
-  #         command: bash scripts/hosted_zone_test.sh << parameters.account >> nonprod
-  #     - run:
-  #         name: integration test prod account
-  #         command: bash scripts/hosted_zone_test.sh << parameters.account >> prod
+  host-zone-integration-test:
+    description: generate environment credentials and configuration from templates
+    steps:
+      - run:
+          name: integration test nonprod account
+          command: bash scripts/hosted_zone_test.sh << parameters.account >> nonprod
+      - run:
+          name: integration test prod account
+          command: bash scripts/hosted_zone_test.sh << parameters.account >> prod
 
 # jobs:
 
@@ -111,35 +109,37 @@ workflows:
                 account: multiaccount
           filters: *on-push-main
 
-      # - approve:
-      #     name: approve teardown prod
-      #     type: approval
-      #     filters: *on-push-main
+      - approve:
+          name: approve hosted-zones change plan
+          type: approval
+          requires:
+            - static code analysis
+            - hosted-zones change plan
+          filters: *on-push-main
 
-      # approve plan
-
-      # deploy route53 zone configuration
+      - terraform/apply:
+          name: hosted-zones release
+          context: *context
+          executor-image: *executor-image
+          workspace: state
+          before-apply:
+            - set-environment:
+                account: multiaccount
+          after-apply:
+            - integration-tests:
+                account: multiaccount
+            - do/slack-bot:
+                channel: lab-events
+                message: Release psk-platform-simple-teams-and-ns hosted-zones
+                include-link: true
+                include-tag: true
+          filters: *on-push-main
 
       # deploy sbx preview config
 
   # standard enviro:
   #   jobs:
-  #     - terraform/apply:
-  #         name: hosted-zones release
-  #         context: *context
-  #         workspace: state
-  #         before-apply:
-  #           - set-environment:
-  #               account: multiaccount
-  #         after-apply:
-  #           - integration-tests:
-  #               account: multiaccount
-  #           - do/slack-bot:
-  #               channel: lab-events
-  #               message: Release psk-aws-platform-hosted-zones
-  #               include-link: true
-  #               include-tag: true
-  #         filters: *on-tag-main
+
 
       # apply cluster configuration
       # - external-dns instances
