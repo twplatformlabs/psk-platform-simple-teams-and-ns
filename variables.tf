@@ -14,4 +14,4 @@ variable "prod_account_id" {
   }
   sensitive = true
 }
-variable "assume_role" { type = string }
+variable "domain_assume_role" { type = string }
