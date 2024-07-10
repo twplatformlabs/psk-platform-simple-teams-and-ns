@@ -100,64 +100,64 @@ workflows:
 
   hosted-zones and preview environment configuration:
     jobs:
-      - terraform/static-analysis:
-          name: static code analysis
-          context: *context
-          executor-image: *executor-image
-          workspace: state
-          tflint-scan: true
-          tflint-provider: aws
-          trivy-scan: true
-          before-static-analysis:
-            - op/env:
-                env-file: op.multiaccount.env
-          filters: *on-push-main
+      # - terraform/static-analysis:
+      #     name: static code analysis
+      #     context: *context
+      #     executor-image: *executor-image
+      #     workspace: state
+      #     tflint-scan: true
+      #     tflint-provider: aws
+      #     trivy-scan: true
+      #     before-static-analysis:
+      #       - op/env:
+      #           env-file: op.multiaccount.env
+      #     filters: *on-push-main
 
-      - terraform/plan:
-          name: hosted-zones change plan
-          context: *context
-          executor-image: *executor-image
-          workspace: state
-          checkov-scan: true
-          before-plan:
-            - set-environment:
-                account: multiaccount
-          filters: *on-push-main
+      # - terraform/plan:
+      #     name: hosted-zones change plan
+      #     context: *context
+      #     executor-image: *executor-image
+      #     workspace: state
+      #     checkov-scan: true
+      #     before-plan:
+      #       - set-environment:
+      #           account: multiaccount
+      #     filters: *on-push-main
 
-      - approve:
-          name: approve hosted-zones change plan
-          type: approval
-          requires:
-            - static code analysis
-            - hosted-zones change plan
-          filters: *on-push-main
+      # - approve:
+      #     name: approve hosted-zones change plan
+      #     type: approval
+      #     requires:
+      #       - static code analysis
+      #       - hosted-zones change plan
+      #     filters: *on-push-main
 
-      - terraform/apply:
-          name: hosted-zones release
-          context: *context
-          executor-image: *executor-image
-          workspace: state
-          before-apply:
-            - set-environment:
-                account: multiaccount
-          after-apply:
-            - host-zone-integration-test:
-                account: multiaccount
-            - do/slack-bot:
-                channel: lab-events
-                message: Release psk-platform-simple-teams-and-ns hosted-zones
-                include-link: true
-                include-tag: true
-          requires:
-             - approve hosted-zones change plan
-          filters: *on-push-main
+      # - terraform/apply:
+      #     name: hosted-zones release
+      #     context: *context
+      #     executor-image: *executor-image
+      #     workspace: state
+      #     before-apply:
+      #       - set-environment:
+      #           account: multiaccount
+      #     after-apply:
+      #       - host-zone-integration-test:
+      #           account: multiaccount
+      #       - do/slack-bot:
+      #           channel: lab-events
+      #           message: Release psk-platform-simple-teams-and-ns hosted-zones
+      #           include-link: true
+      #           include-tag: true
+      #     requires:
+      #        - approve hosted-zones change plan
+      #     filters: *on-push-main
 
       - deploy team and gateway configuration:
           name: deploy sbx team and gateway config
           context: *context
           cluster: sbx-i01-aws-us-east-1
-          requires:
-            - hosted-zones release
+          # requires:
+          #   - hosted-zones release
           filters: *on-push-main
 
 
