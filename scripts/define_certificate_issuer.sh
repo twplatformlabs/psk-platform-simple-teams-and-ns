@@ -18,7 +18,7 @@ cat <<EOF > "${cluster_name}-cluster-issuer.yaml"
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-$cluster_name-issuer
+  name: letsencrypt-$cluster_name-simple-teams-issuer
 spec:
   acme:
     server: $issuer_endpoint

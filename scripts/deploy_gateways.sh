@@ -22,7 +22,7 @@ metadata:
 spec:
   secretName: $domain-certificate
   issuerRef:
-    name: "letsencrypt-${cluster_name}-issuer"
+    name: "letsencrypt-${cluster_name}-simple-teams-issuer"
     kind: ClusterIssuer
   commonName: "*.$domain"
   dnsNames:

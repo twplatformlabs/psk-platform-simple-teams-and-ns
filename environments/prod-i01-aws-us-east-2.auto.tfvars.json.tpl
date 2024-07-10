@@ -8,9 +8,6 @@
   "istio_version": "1.21.0",
 
   "cluster_domains": [
-    "twdps.io",
-    "prod-i01-aws-us-east-2.twdps.digital",
-    "prod-i01-aws-us-east-2.twdps.io",
     "dev.twdps.digital",
     "dev.twdps.io",
     "qa.twdps.digital",
