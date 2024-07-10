@@ -36,6 +36,8 @@ commands:
           tpl-path: environments
           tpl-file: << parameters.account >>.auto.tfvars.json
       - terraform/terraformrc
+      - kube/op-config:
+          op-value: empc-lab/psk-aws-<< parameters.cluster>>/kubeconfig-base64
       - do/bash-functions
 
   host-zone-integration-test:
