@@ -153,6 +153,7 @@ workflows:
           name: deploy sbx team and gateway config
           context: *context
           cluster: sbx-i01-aws-us-east-1
+          account: nonprod
           requires:
             - hosted-zones release
           filters: *on-push-main
