@@ -10,6 +10,7 @@ mask: []
 secrets-scan-file-type: []
 summary-position: top
 skip-check:
-  - CKV_TF_1         # not supported by terraform registry
+  - CKV_TF_1                 # not supported by terraform registry
+  - CKV_CIRCLECIPIPELINES_2  # image is built by the maintainer of this pipeline
   - CKV2_AWS_38
   - CKV2_AWS_39
