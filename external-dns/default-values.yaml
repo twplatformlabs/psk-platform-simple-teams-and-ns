@@ -72,6 +72,7 @@ logFormat: json
 
 interval: 1m
 
+policy: sync
 sources:
   - service
   - ingress

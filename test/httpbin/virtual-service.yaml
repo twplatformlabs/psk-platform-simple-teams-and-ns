@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: httpbin
+  namespace: default-mtls
+spec:
+  hosts:
+  - "httpbin.sbx-i01-aws-us-east-1.twdps.io"
+  gateways:
+  - istio-system/sbx-i01-aws-us-east-1-twdps-io-gateway
+  http:
+    - route:
+      - destination:
+          host: httpbin.default-mtls.svc.cluster.local
+          port:
+            number: 80
