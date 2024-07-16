@@ -2,5 +2,5 @@ multiaccount.auto.tfvars.json
 credentials
 .terraform*
 source.env
-kubeconfig
+kubeconfig*
 .ruby-version

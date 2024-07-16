@@ -100,29 +100,29 @@ workflows:
 
   hosted-zones and preview environment configuration:
     jobs:
-      # - terraform/static-analysis:
-      #     name: static code analysis
-      #     context: *context
-      #     executor-image: *executor-image
-      #     workspace: state
-      #     tflint-scan: true
-      #     tflint-provider: aws
-      #     trivy-scan: true
-      #     before-static-analysis:
-      #       - op/env:
-      #           env-file: op.multiaccount.env
-      #     filters: *on-push-main
+      - terraform/static-analysis:
+          name: static code analysis
+          context: *context
+          executor-image: *executor-image
+          workspace: state
+          tflint-scan: true
+          tflint-provider: aws
+          trivy-scan: true
+          before-static-analysis:
+            - op/env:
+                env-file: op.multiaccount.env
+          filters: *on-push-main
 
-      # - terraform/plan:
-      #     name: hosted-zones change plan
-      #     context: *context
-      #     executor-image: *executor-image
-      #     workspace: state
-      #     checkov-scan: true
-      #     before-plan:
-      #       - set-environment:
-      #           account: multiaccount
-      #     filters: *on-push-main
+      - terraform/plan:
+          name: hosted-zones change plan
+          context: *context
+          executor-image: *executor-image
+          workspace: state
+          checkov-scan: true
+          before-plan:
+            - set-environment:
+                account: multiaccount
+          filters: *on-push-main
 
       # - approve:
       #     name: approve hosted-zones change plan
@@ -152,13 +152,13 @@ workflows:
       #        - approve hosted-zones change plan
       #     filters: *on-push-main
 
-      - deploy team and gateway configuration:
-          name: deploy sbx team and gateway config
-          context: *context
-          cluster: sbx-i01-aws-us-east-1
-          # requires:
-          #   - hosted-zones release
-          filters: *on-push-main
+      # - deploy team and gateway configuration:
+      #     name: deploy sbx team and gateway config
+      #     context: *context
+      #     cluster: sbx-i01-aws-us-east-1
+      #     # requires:
+      #     #   - hosted-zones release
+      #     filters: *on-push-main
 
 
   # standard enviro:
