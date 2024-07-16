@@ -6,7 +6,7 @@ provider "aws" {
   }
 }
 
-module "external_dns_irsa_role" {
+module "sbx_external_dns_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.40.0"
 
@@ -31,7 +31,7 @@ provider "aws" {
   }
 }
 
-module "external_dns_irsa_role" {
+module "prod_external_dns_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.40.0"
 
