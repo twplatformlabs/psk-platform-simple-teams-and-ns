@@ -1,18 +1,19 @@
-variable "nonprod_account_id" {
+variable "aws_region" {
+  type = string
+  validation {
+    condition     = can(regex("[a-z][a-z]-[a-z]+-[1-9]", var.aws_region))
+    error_message = "Invalid AWS Region name."
+  }
+}
+
+variable "aws_account_id" {
   type      = string
   validation {
-    condition     = length(var.nonprod_account_id) == 12 && can(regex("^\\d{12}$", var.nonprod_account_id))
+    condition     = length(var.aws_account_id) == 12 && can(regex("^\\d{12}$", var.aws_account_id))
     error_message = "Invalid AWS account ID"
   }
   sensitive = true
 }
-variable "prod_account_id" {
-  type      = string
-  validation {
-    condition     = length(var.prod_account_id) == 12 && can(regex("^\\d{12}$", var.prod_account_id))
-    error_message = "Invalid AWS account ID"
-  }
-  sensitive = true
-}
-variable "domain_assume_role" { type = string }
-variable "sa_assume_role" { type = string }
+
+variable "aws_assume_role" { type = string }
+variable "cluster_name" { type = string }
