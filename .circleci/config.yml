@@ -118,7 +118,6 @@ workflows:
           context: *context
           executor-image: *executor-image
           workspace: sbx-i01-aws-us-east-1
-          checkov-scan: true
           before-plan:
             - set-environment:
                 account: sbx-i01-aws-us-east-1
