@@ -114,7 +114,7 @@ workflows:
           filters: *on-push-main
 
       - terraform/plan:
-          name: hosted-zones change plan
+          name: service account change plan
           context: *context
           executor-image: *executor-image
           workspace: sbx-i01-aws-us-east-1

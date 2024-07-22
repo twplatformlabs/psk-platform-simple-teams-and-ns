@@ -21,7 +21,7 @@ provider "aws" {
 
   assume_role {
     role_arn     = "arn:aws:iam::${var.aws_account_id}:role/${var.aws_assume_role}"
-    session_name = "psk-aws-control-plane-extensions"
+    session_name = "psk-aws-platform-simple-teams-and-ns"
   }
 
   default_tags {
