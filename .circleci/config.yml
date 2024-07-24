@@ -39,7 +39,7 @@ commands:
       - terraform/terraformrc
       - do/bash-functions
 
-  host-zone-integration-test:
+  service-account-integration-test:
     description: generate environment credentials and configuration from templates
     parameters:
       account:
@@ -48,9 +48,6 @@ commands:
       - run:
           name: integration test nonprod account
           command: bash scripts/hosted_zone_test.sh << parameters.account >> nonprod
-      - run:
-          name: integration test prod account
-          command: bash scripts/hosted_zone_test.sh << parameters.account >> prod
 
   teams-and-gateways-integration-tests:
     parameters:
@@ -123,33 +120,28 @@ workflows:
                 account: sbx-i01-aws-us-east-1
           filters: *on-push-main
 
-      # - approve:
-      #     name: approve hosted-zones change plan
-      #     type: approval
-      #     requires:
-      #       - static code analysis
-      #       - hosted-zones change plan
-      #     filters: *on-push-main
+      - approve:
+          name: approve service account change plan
+          type: approval
+          requires:
+            - static code analysis
+            - service account change plan
+          filters: *on-push-main
 
-      # - terraform/apply:
-      #     name: hosted-zones release
-      #     context: *context
-      #     executor-image: *executor-image
-      #     workspace: state
-      #     before-apply:
-      #       - set-environment:
-      #           account: multiaccount
-      #     after-apply:
-      #       - host-zone-integration-test:
-      #           account: multiaccount
-      #       - do/slack-bot:
-      #           channel: lab-events
-      #           message: Release psk-platform-simple-teams-and-ns hosted-zones
-      #           include-link: true
-      #           include-tag: true
-      #     requires:
-      #        - approve hosted-zones change plan
-      #     filters: *on-push-main
+      - terraform/apply:
+          name: service account release
+          context: *context
+          executor-image: *executor-image
+          workspace: sbx-i01-aws-us-east-1
+          before-apply:
+            - set-environment:
+                account: sbx-i01-aws-us-east-1
+          after-apply:
+            - service-account-integration-test:
+                account: sbx-i01-aws-us-east-1
+          requires:
+             - approve service account change plan
+          filters: *on-push-main
 
       # - deploy team and gateway configuration:
       #     name: deploy sbx team and gateway config
@@ -160,6 +152,14 @@ workflows:
       #     filters: *on-push-main
 
 
+
+
+
+            # - do/slack-bot:
+            #     channel: lab-events
+            #     message: Release psk-platform-simple-teams-and-ns sbx release
+            #     include-link: true
+            #     include-tag: true
   # standard enviro:
   #   jobs:
 
