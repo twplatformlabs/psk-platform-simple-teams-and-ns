@@ -12,7 +12,7 @@ for domain in "${domains[@]}";
 do
 
   echo "create certificate for $domain"
-  cat <<EOF > tpl/$domain-certificate.yaml
+  cat <<EOF > $domain-certificate.yaml
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -29,12 +29,12 @@ spec:
   - "$domain"
   - "*.$domain"
 EOF
-  cat tpl/$domain-certificate.yaml
-  kubectl apply -f tpl/$domain-certificate.yaml
+  cat $domain-certificate.yaml
+  kubectl apply -f $domain-certificate.yaml
 
   echo "define gateway for $domain"
   export gateway=$( echo $domain | tr . - )
-  cat <<EOF > tpl/$domain-gateway.yaml
+  cat <<EOF > $domain-gateway.yaml
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
@@ -67,9 +67,9 @@ spec:
       mode: SIMPLE
       credentialName: "$domain-certificate"
 EOF
-  cat tpl/$domain-gateway.yaml
-  kubectl apply -f tpl/$domain-gateway.yaml
+  cat $domain-gateway.yaml
+  kubectl apply -f $domain-gateway.yaml
 
 done
 
-sleep 360
+#sleep 360
