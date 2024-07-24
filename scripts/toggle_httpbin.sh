@@ -4,12 +4,18 @@ set -eo pipefail
 export toggle=$1
 export cluster_name=$2
 
+if [[ "$cluster_name" == "sbx-i01-aws-us-eat-1"]]; then
+  export testenv=preview
+else
+  export testenv=dev
+fi
+
 node_count () {
   nodes=$(kubectl get nodes -l kubernetes.io/arch=amd64 | tail -n +2 | wc -l | xargs)
   echo "current node count $nodes"
 }
 
-echo "toggle $toggle httpbin test instance on $cluster_name"
+echo "toggle $toggle httpbin test instance on $cluster_name receiving traffic from $testenv gateway"
 
 cat <<EOF > test/httpbin/virtual-service.yaml
 ---
@@ -20,9 +26,9 @@ metadata:
   namespace: default-mtls
 spec:
   hosts:
-  - "httpbin.$cluster_name.twdps.io"
+  - "httpbin.$testenv.twdps.io"
   gateways:
-  - istio-system/$cluster_name-twdps-io-gateway
+  - istio-system/$testenv-twdps-io-gateway
   http:
     - route:
       - destination:

@@ -72,4 +72,4 @@ EOF
 
 done
 
-#sleep 360
+sleep 360
