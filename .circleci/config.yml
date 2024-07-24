@@ -49,18 +49,18 @@ commands:
           name: integration test nonprod account
           command: bash scripts/service_account_integration_test.sh << parameters.account >>
 
-  # teams-and-gateways-integration-tests:
-  #   parameters:
-  #     cluster:
-  #       description: cluster and tf workspace name
-  #       type: string
-  #   steps:
-  #     - run:
-  #         name: run control plane services integration tests
-  #         command: bats test/services_integration_tests.bats
-  #     - run:
-  #         name: run gateway functional test
-  #         command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
+  teams-and-gateways-integration-tests:
+    parameters:
+      cluster:
+        description: cluster and tf workspace name
+        type: string
+    steps:
+      - run:
+          name: run control plane services integration tests
+          command: bats test/services_integration_tests.bats
+      - run:
+          name: run gateway functional test
+          command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
 
 jobs:
 
@@ -80,17 +80,16 @@ jobs:
       - run:
           name: install external-dns
           command: bash scripts/install_external_dns.sh << parameters.cluster >>
-      # - run:
-      #     name: deploy cluster certificate issuer
-      #     command: |
-      #       bash scripts/define_certificate_issuer.sh << parameters.cluster >>
-      #       bash scripts/deploy_certificate_issuer.sh << parameters.cluster >>
-      # - run:
-      #     name: deploy cluster defautl gateways
-      #     command: bash scripts/deploy_gateways.sh << parameters.cluster >>
-
-      # - teams-and-gateways-integration-tests:
-      #      cluster: << parameters.cluster >>
+      - run:
+          name: deploy cluster certificate issuer
+          command: |
+            bash scripts/define_certificate_issuer.sh << parameters.cluster >>
+            bash scripts/deploy_certificate_issuer.sh << parameters.cluster >>
+      - run:
+          name: deploy cluster defautl gateways
+          command: bash scripts/deploy_gateways.sh << parameters.cluster >>
+      - teams-and-gateways-integration-tests:
+           cluster: << parameters.cluster >>
 
 workflows:
   version: 2
