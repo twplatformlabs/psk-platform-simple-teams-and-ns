@@ -24,7 +24,7 @@ spec:
     server: $issuer_endpoint
     email: $issuer_email
     privateKeySecretRef:
-      name: letsencrypt-$cluster_name
+      name: letsencrypt-$cluster_name-simple-teams-issuer
     solvers:
 EOF
 
