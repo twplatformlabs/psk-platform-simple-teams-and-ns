@@ -47,20 +47,20 @@ commands:
     steps:
       - run:
           name: integration test nonprod account
-          command: bash scripts/hosted_zone_test.sh << parameters.account >> nonprod
+          command: bash scripts/service_account_integration_test.sh << parameters.account >>
 
-  teams-and-gateways-integration-tests:
-    parameters:
-      cluster:
-        description: cluster and tf workspace name
-        type: string
-    steps:
-      - run:
-          name: run control plane services integration tests
-          command: bats test/services_integration_tests.bats
-      - run:
-          name: run gateway functional test
-          command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
+  # teams-and-gateways-integration-tests:
+  #   parameters:
+  #     cluster:
+  #       description: cluster and tf workspace name
+  #       type: string
+  #   steps:
+  #     - run:
+  #         name: run control plane services integration tests
+  #         command: bats test/services_integration_tests.bats
+  #     - run:
+  #         name: run gateway functional test
+  #         command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
 
 jobs:
 
@@ -95,10 +95,10 @@ jobs:
 workflows:
   version: 2
 
-  hosted-zones and preview environment configuration:
+  sbx-i01-aws-us-east-1 simple ns configuration:
     jobs:
       - terraform/static-analysis:
-          name: terraform static code analysis
+          name: static code analysis
           context: *context
           executor-image: *executor-image
           workspace: sbx-i01-aws-us-east-1
@@ -124,7 +124,7 @@ workflows:
           name: approve service account change plan
           type: approval
           requires:
-            - terraform static code analysis
+            - static code analysis
             - service account change plan
           filters: *on-push-main
 
