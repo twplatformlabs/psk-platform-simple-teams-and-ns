@@ -124,7 +124,7 @@ workflows:
           name: approve service account change plan
           type: approval
           requires:
-            - static code analysis
+            - terraform static code analysis
             - service account change plan
           filters: *on-push-main
 
