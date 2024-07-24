@@ -20,7 +20,7 @@ for team in $teams; do
   for namespace in $namespaces; do
     echo "  namespace: $namespace"
 
-    cat <<EOF > $team-namespace_with_quota.yaml
+    cat <<EOF > ns/$team-$namespace-namespace_with_quota.yaml
 ---
 apiVersion: v1
 kind: Namespace
@@ -47,8 +47,6 @@ spec:
     limits.cpu: "10"
     limits.memory: 20Gi
 EOF
-
-
 
   done
 done

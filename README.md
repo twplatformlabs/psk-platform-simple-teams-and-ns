@@ -40,6 +40,17 @@ A typical external->internal routing patterns for domains would be:
 api.twdps.io  >  "external api gateway"  >  api.prod.twdps.io
 dev.api.twdps.io > "external api gateway" > api.stage.twdps.io  # or whatever environment constitutes a publically useable test env
 
+A small list of example early-adopter customers have their configuration managed by this temporary, simple ns management pipeline.  
+
+| alpha teams           | sbx-i01-aws-us-east-1  | prod-i01-aws-us-east-2  |
+|-----------------------|:----------------------:|:-----------------------:|
+| twdps-core-labs-team  | preview                | dev, qa, prod           |
+| demo                  | preview                | dev, qa, prod           |
+| demo-publications     |                        | dev, qa, prod           |
+| demo-reviews          |                        | dev, qa, prod           |
+
+For each, there will be a demo-preview, demo-dev and so on depending on the team and the cluster. Only demo and twdps-core-labs-team have a preview ns in the sbx cluster for demonstrating the role of the preview cluster.  
+
 ## Note
 
 This pipeline is expected to be short-lived and only used to support a small number of teams onboarded. Any scale at all will begin to reveal that this is unsustainable. The value is limited to getting a limited number of early adoptors onto the plateform to provide the necessary feedback loop for features as they evolve. THe follow-on API that will ultimately own this category of configuration must be a high priority.

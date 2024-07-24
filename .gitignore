@@ -5,3 +5,4 @@ source.env
 kubeconfig*
 .ruby-version
 bash-functions*
+ns/*.yaml
