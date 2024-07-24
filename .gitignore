@@ -1,6 +1,7 @@
-multiaccount.auto.tfvars.json
+*.auto.tfvars.json
 credentials
 .terraform*
 source.env
 kubeconfig*
 .ruby-version
+bash-functions*
