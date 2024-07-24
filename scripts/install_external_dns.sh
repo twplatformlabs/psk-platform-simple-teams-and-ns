@@ -29,7 +29,7 @@ echo "install simple-teams-external-dns"
 helm upgrade --install simple-teams-external-dns external-dns/external-dns \
              --version v$chart_version \
              --namespace istio-system \
-             --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::${AWS_ACCOUNT_ID}:role/PSKRoles/${cluster_name}-external-dns-sa \
+             --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::${AWS_ACCOUNT_ID}:role/PSKRoles/simple-teams-external-dns-sa \
              --set txtOwnerId=$cluster_name-twdps-labs \
              --values cluster-domains-values.yaml \
              --values external-dns/default-values.yaml

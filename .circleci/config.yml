@@ -143,13 +143,13 @@ workflows:
              - approve service account change plan
           filters: *on-push-main
 
-      # - deploy team and gateway configuration:
-      #     name: deploy sbx team and gateway config
-      #     context: *context
-      #     cluster: sbx-i01-aws-us-east-1
-      #     # requires:
-      #     #   - hosted-zones release
-      #     filters: *on-push-main
+      - deploy team and gateway configuration:
+          name: deploy sbx team and gateway config
+          context: *context
+          cluster: sbx-i01-aws-us-east-1
+          requires:
+            - service account release
+          filters: *on-push-main
 
 
 
