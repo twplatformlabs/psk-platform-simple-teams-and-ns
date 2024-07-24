@@ -57,7 +57,7 @@ commands:
     steps:
       - run:
           name: run control plane services integration tests
-          command: bats test/services_integration_tests.bats
+          command: bats test/external_dns_service_status.bats
       - run:
           name: run gateway functional test
           command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
