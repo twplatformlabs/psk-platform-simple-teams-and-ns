@@ -4,10 +4,10 @@ set -eo pipefail
 export toggle=$1
 export cluster_name=$2
 
-if [[ "$cluster_name" == "sbx-i01-aws-us-eat-1"]]; then
-  export testenv=preview
+if [[ "$cluster_name" == "sbx-i01-aws-us-east-1" ]]; then
+  testenv="preview"
 else
-  export testenv=dev
+  testenv="dev"
 fi
 
 node_count () {
