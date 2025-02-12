@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
+source bash-functions.sh
 
 cluster_name=$1
-
 chart_version=$(jq -er .external_dns_chart_version $cluster_name.auto.tfvars.json)
 cluster_domains=$(jq -er .cluster_domains $cluster_name.auto.tfvars.json)
 AWS_ACCOUNT_ID=$(jq -er .aws_account_id $cluster_name.auto.tfvars.json)
@@ -24,6 +24,9 @@ cat cluster-domains-values.yaml
 
 helm repo add external-dns https://kubernetes-sigs.github.io/external-dns/
 helm repo update
+
+# perform trivy scan of chart with install configuration
+trivyScan "external-dns/external-dns" "external-dns"  "$chart_version" "external-dns-values/$cluster_name-values.yaml"
 
 echo "install simple-teams-external-dns"
 helm upgrade --install simple-teams-external-dns external-dns/external-dns \
