@@ -3,7 +3,7 @@
   "aws_assume_role": "PSKRoles/PSKControlPlaneBaseRole",
   "aws_region": "us-east-1",
   "cluster_name": "sbx-i01-aws-us-east-1",
-  "external_dns_chart_version": "1.14.4",
+  "external_dns_chart_version": "1.15.0",
 
   "cluster_domains": [
     "preview.twdps.digital",

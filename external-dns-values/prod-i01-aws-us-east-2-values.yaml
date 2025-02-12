@@ -84,7 +84,7 @@ extraArgs:
 
 registry: txt
 
-txtOwnerId: 
+txtOwnerId:
 txtPrefix:
 txtSuffix:
 excludeDomains: []

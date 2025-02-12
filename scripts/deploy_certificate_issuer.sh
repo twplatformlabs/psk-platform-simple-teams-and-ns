@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source bash-functions.sh
+
 set -eo pipefail
 
 cluster_name=$1
@@ -11,7 +12,6 @@ export cluster_domains=$(jq -er .cluster_domains "$cluster_name".auto.tfvars.jso
 export issuer_email=$(jq -er .issuerEmail "$cluster_name".auto.tfvars.json)
 export issuer_endpoint=$(jq -er .issuerEndpoint "$cluster_name".auto.tfvars.json)
 
-awsAssumeRole "${aws_account_id}" "${aws_assume_role}"
 
 # generate cluster issuer resource template
 cat <<EOF > "${cluster_name}-cluster-issuer.yaml"
