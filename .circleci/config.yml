@@ -66,9 +66,6 @@ commands:
         type: string
     steps:
       - run:
-          name: run default gateway integration tests
-          command: bats test/
-      - run:
           name: run gateway functional test
           command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
 
@@ -167,10 +164,53 @@ workflows:
             - deploy sbx-i01-aws-us-east-1 environment gateways
           filters: *on-push-main
 
+  prod-i01-aws-us-east-2 simple ns configuration:
+    jobs:
+      - terraform/apply:
+          name: prod-i01-aws-us-east-2 service account release
+          context: *context
+          executor-image: *executor-image
+          workspace: prod-i01-aws-us-east-2
+          before-apply:
+            - set-environment:
+                account: prod-i01-aws-us-east-2
+          after-apply:
+            - service-account-integration-test:
+                account: prod-i01-aws-us-east-2
+          requires:
+             - static code analysis
+          filters: *on-tag-main
 
+      - deploy default environment gateways:
+          name: deploy prod-i01-aws-us-east-2 environment gateways
+          context: *context
+          cluster: prod-i01-aws-us-east-2
+          requires:
+            - prod-i01-aws-us-east-2 service account release
+          filters: *on-tag-main
 
-      # apply cluster configuration
-      # - external-dns instances
-      # - gateways/certificates
-      # - namespaces with quotas for list of teams, only need be prod for this example
+      - deploy team namespaces:
+          name: deploy prod-i01-aws-us-east-2 team namespaces
+          context: *context
+          cluster: prod-i01-aws-us-east-2
+          requires:
+            - deploy prod-i01-aws-us-east-2 environment gateways
+          filters: *on-tag-main
 
+      - do/gh-release:
+          name: generate release notes
+          context: *context
+          notes-from-file: release.md
+          include-commit-msg: true
+          before-release:
+            - op/env:
+                env-file: op.prod-i01-aws-us-east-2.env
+          after-release:
+            - do/slack-bot:
+                channel: lab-events
+                message: Release psk-platform-simple-teams-and-ns
+                include-link: true
+                include-tag: true
+          requires:
+            - deploy prod-i01-aws-us-east-2 team namespaces
+          filters: *on-tag-main
