@@ -49,15 +49,25 @@ commands:
           name: integration test nonprod account
           command: bash scripts/service_account_integration_test.sh << parameters.account >>
 
-  teams-and-gateways-integration-tests:
+  gateway-integration-tests:
     parameters:
       cluster:
         description: cluster and tf workspace name
         type: string
     steps:
       - run:
-          name: run control plane services integration tests
-          command: bats test/external_dns_service_status.bats
+          name: run default gateway integration tests
+          command: bats test/default_gateway_support_status.bats
+  
+  # namespace-integration-tests:
+  #   parameters:
+  #     cluster:
+  #       description: cluster and tf workspace name
+  #       type: string
+  #   steps:
+  #     - run:
+  #         name: run default gateway integration tests
+  #         command: bats test/
       # - run:
       #     name: run gateway functional test
       #     command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
@@ -80,15 +90,13 @@ jobs:
       - run:
           name: install external-dns
           command: bash scripts/install_external_dns.sh << parameters.cluster >>
-      # - run:
-      #     name: deploy cluster certificate issuer
-      #     command: |
-      #       bash scripts/define_certificate_issuer.sh << parameters.cluster >>
-      #       bash scripts/deploy_certificate_issuer.sh << parameters.cluster >>
-      # - run:
-      #     name: deploy cluster defautl gateways
-      #     command: bash scripts/deploy_gateways.sh << parameters.cluster >>
-      - teams-and-gateways-integration-tests:
+      - run:
+          name: deploy cluster certificate issuer
+          command: bash scripts/deploy_certificate_issuer.sh << parameters.cluster >>
+      - run:
+          name: deploy cluster defautl gateways
+          command: bash scripts/deploy_gateways.sh << parameters.cluster >>
+      - gateway-integration-tests:
            cluster: << parameters.cluster >>
 
   # deploy team namespaces:
