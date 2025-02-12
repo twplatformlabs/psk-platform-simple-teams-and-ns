@@ -177,8 +177,6 @@ workflows:
           after-apply:
             - service-account-integration-test:
                 account: prod-i01-aws-us-east-2
-          requires:
-             - static code analysis
           filters: *on-tag-main
 
       - deploy default environment gateways:
