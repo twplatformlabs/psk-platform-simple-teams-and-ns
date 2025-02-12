@@ -59,18 +59,18 @@ commands:
           name: run default gateway integration tests
           command: bats test/default_gateway_support_status.bats
   
-  # namespace-integration-tests:
-  #   parameters:
-  #     cluster:
-  #       description: cluster and tf workspace name
-  #       type: string
-  #   steps:
-  #     - run:
-  #         name: run default gateway integration tests
-  #         command: bats test/
-      # - run:
-      #     name: run gateway functional test
-      #     command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
+  gateway-functional-tests:
+    parameters:
+      cluster:
+        description: cluster and tf workspace name
+        type: string
+    steps:
+      - run:
+          name: run default gateway integration tests
+          command: bats test/
+      - run:
+          name: run gateway functional test
+          command: bash scripts/gateway_functional_test.sh << parameters.cluster >>
 
 jobs:
 
@@ -99,22 +99,24 @@ jobs:
       - gateway-integration-tests:
            cluster: << parameters.cluster >>
 
-  # deploy team namespaces:
-  #   docker:
-  #     - image: *executor-image
-  #   parameters:
-  #     cluster:
-  #       description: cluster name
-  #       type: string
-  #   steps:
-  #     - checkout
-  #     - set-environment:
-  #         account: << parameters.cluster >>
-  #     - kube/op-config:
-  #         op-value: empc-lab/psk-aws-<< parameters.cluster >>/kubeconfig-base64
-  #     - run:
-  #         name: deploy team namespaces
-  #         command: bash scripts/deploy_namespaces.sh << parameters.cluster >>
+  deploy team namespaces:
+    docker:
+      - image: *executor-image
+    parameters:
+      cluster:
+        description: cluster name
+        type: string
+    steps:
+      - checkout
+      - set-environment:
+          account: << parameters.cluster >>
+      - kube/op-config:
+          op-value: empc-lab/psk-aws-<< parameters.cluster >>/kubeconfig-base64
+      - run:
+          name: deploy team namespaces
+          command: bash scripts/deploy_namespaces.sh << parameters.cluster >>
+      - gateway-functional-tests:
+           cluster: << parameters.cluster >>
 
 workflows:
   version: 2
@@ -157,7 +159,13 @@ workflows:
             - sbx-i01-aws-us-east-1 service account release
           filters: *on-push-main
 
-
+      - deploy team namespaces:
+          name: deploy sbx-i01-aws-us-east-1 team namespaces
+          context: *context
+          cluster: sbx-i01-aws-us-east-1
+          requires:
+            - deploy sbx-i01-aws-us-east-1 environment gateways
+          filters: *on-push-main
 
 
 

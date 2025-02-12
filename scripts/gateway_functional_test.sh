@@ -3,6 +3,8 @@ set -eo pipefail
 
 export cluster_name=$1
 
+echo "use httpbin subdomain on default gateway to test functional health"
+
 if [[ "$cluster_name" == "sbx-i01-aws-us-east-1" ]]; then
   testenv="preview"
 else

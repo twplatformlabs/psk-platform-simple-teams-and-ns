@@ -50,3 +50,5 @@ EOF
 
   done
 done
+
+kubectl apply -f ns/*.yaml
