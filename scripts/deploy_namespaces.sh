@@ -3,6 +3,7 @@ set -eo pipefail
 
 export cluster_name=$1
 
+
 # Load the simple sample teams data for the current cluster
 json_file=environments/$cluster_name-teams.json
 
@@ -10,6 +11,7 @@ json_file=environments/$cluster_name-teams.json
 teams=$(jq -r 'keys[]' $json_file)
 
 # Iterate over each team
+echo "generate $cluster_name team namespace resource files"
 for team in $teams; do
   echo "team: $team"
   
@@ -50,5 +52,5 @@ EOF
 
   done
 done
-
-kubectl apply -f ns/*.yaml
+echo "deploy resources"
+kubectl apply -f ns --recursive
