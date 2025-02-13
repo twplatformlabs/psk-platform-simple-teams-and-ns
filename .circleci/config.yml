@@ -111,7 +111,7 @@ jobs:
           op-value: empc-lab/psk-aws-<< parameters.cluster >>/kubeconfig-base64
       - run:
           name: deploy team namespaces
-          command: bash scripts/deploy_namespaces.sh << parameters.cluster >>
+          command: bash scripts/deploy_namespaces.sh << parameters.cluster >> $DOCKERREGISTRYACCESS
       - gateway-functional-tests:
            cluster: << parameters.cluster >>
 

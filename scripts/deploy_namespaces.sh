@@ -2,7 +2,7 @@
 set -eo pipefail
 
 export cluster_name=$1
-export registryaccess=$(echo $DOCKERREGISTRYACCESS | base64)
+export registryaccess=$2
 
 # Load the simple sample teams data for the current cluster
 json_file=environments/$cluster_name-teams.json
