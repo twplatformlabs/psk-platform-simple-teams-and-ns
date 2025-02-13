@@ -2,7 +2,7 @@
 set -eo pipefail
 
 export cluster_name=$1
-
+export registryaccess=$(echo $DOCKERREGISTRYACCESS | base64)
 
 # Load the simple sample teams data for the current cluster
 json_file=environments/$cluster_name-teams.json
@@ -99,6 +99,16 @@ roleRef:
   kind: Role
   name: $team-$namespace-team-role
   apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: defaultregistrykey
+  namespace: $team-$namespace
+data:
+  .dockerconfigjson: $registryaccess
+type: kubernetes.io/dockerconfigjson
 EOF
 
   done

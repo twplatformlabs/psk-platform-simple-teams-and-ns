@@ -53,4 +53,8 @@ For each, there will be a demo-preview, demo-dev and so on depending on the team
 
 ## Note
 
-This pipeline is expected to be short-lived and only used to support a small number of teams onboarded. Any scale at all will begin to reveal that this is unsustainable. The value is limited to getting a limited number of early adoptors onto the plateform to provide the necessary feedback loop for features as they evolve. THe follow-on API that will ultimately own this category of configuration must be a high priority.
+This pipeline is expected to be short-lived and only used to support a small number of teams onboarded. Any scale at all will demonstrate that this is unsustainable. The value is limited to accelerating a small number of early adoptors onto the plateform to provide the necessary feedback loop for validating a minimum feature set prior to general availability. Prior to GA, the custom platform integration APIs should be deployed to perform the tasks of this static repo in a scalable and resilient architecture.  
+
+## maintainers  
+
+This is a replacement for earlier pre-release alpha team configuration.
