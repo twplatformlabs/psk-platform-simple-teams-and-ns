@@ -104,7 +104,7 @@ roleRef:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: defaultregistrykey
+  name: regcred
   namespace: $team-$namespace
 data:
   .dockerconfigjson: $registryaccess
