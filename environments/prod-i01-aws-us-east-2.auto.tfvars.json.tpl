@@ -10,8 +10,8 @@
     "dev.twdps.io",
     "qa.twdps.digital",
     "qa.twdps.io",
-    "prod.twdps.digital",
-    "prod.twdps.io"
+    "api.twdps.digital",
+    "api.twdps.io"
   ],
   "issuerEndpoint": "https://acme-v02.api.letsencrypt.org/directory",
   "issuerEmail": "twdps.io@gmail.com"
