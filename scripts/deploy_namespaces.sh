@@ -14,10 +14,10 @@ teams=$(jq -r 'keys[]' $json_file)
 echo "generate $cluster_name team namespace resource files"
 for team in $teams; do
   echo "team: $team"
-  
+
   # Read the namespaces that should exist for the current team
   namespaces=$(jq -r --arg k "$team" '.[$k][]' $json_file)
-  
+
   # Iterate over each namespace
   for namespace in $namespaces; do
     echo "  namespace: $namespace"
@@ -91,7 +91,7 @@ metadata:
   namespace: $team-$namespace
 subjects:
   - kind: Group
-    name: ThoughtWorks-DPS/$team
+    name: twplatformlabs/$team
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role

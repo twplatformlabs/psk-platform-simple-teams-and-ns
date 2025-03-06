@@ -2,6 +2,9 @@
   "demo": [
     "preview"
   ],
+  "platform": [
+    "preview"
+  ],
   "twdps-core-labs-team": [
     "preview"
   ]

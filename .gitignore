@@ -4,5 +4,6 @@ credentials
 source.env
 kubeconfig*
 .ruby-version
+.python-version
 bash-functions*
 ns/*.yaml

@@ -26,9 +26,9 @@ metadata:
   namespace: default-mtls
 spec:
   hosts:
-  - "httpbin.$testenv.twdps.io"
+  - "httpbin.$testenv.twplatformlabs.org"
   gateways:
-  - istio-system/$testenv-twdps-io-gateway
+  - istio-system/$testenv-twplatformlabs-org-gateway
   http:
     - route:
       - destination:
