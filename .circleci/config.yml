@@ -108,7 +108,7 @@ jobs:
       - set-environment:
           account: << parameters.cluster >>
       - kube/op-config:
-          op-value: platform/psk-aws-<< parameters.cluster >>/kubeconfig-base64
+          op-value: platform/<< parameters.cluster >>/kubeconfig-base64
       - run:
           name: deploy team namespaces
           command: bash scripts/deploy_namespaces.sh << parameters.cluster >> $DOCKERREGISTRYACCESS
