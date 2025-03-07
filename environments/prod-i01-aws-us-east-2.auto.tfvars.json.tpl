@@ -1,5 +1,5 @@
 {
-  "aws_account_id": "{{ op://platform/aws-platform/aws-account-id }}",
+  "aws_account_id": "{{ op://platform/aws-production/aws-account-id }}",
   "aws_assume_role": "PSKRoles/PSKControlPlaneBaseRole",
   "aws_region": "us-east-2",
   "cluster_name": "prod-i01-aws-us-east-2",
