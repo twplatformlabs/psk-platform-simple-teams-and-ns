@@ -18,10 +18,5 @@
     "dev",
     "qa",
     "prod"
-  ],
-  "twdps-core-labs-team": [
-    "dev",
-    "qa",
-    "prod"
   ]
 }
