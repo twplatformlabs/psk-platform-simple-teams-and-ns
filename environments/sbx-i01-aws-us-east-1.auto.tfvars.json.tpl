@@ -7,9 +7,7 @@
 
   "cluster_domains": [
     "preview.twplatformlabs.org",
-    "preview.twplatformlabs.link",
-    "preview.twdps.digital",
-    "preview.twdps.io"
+    "preview.twplatformlabs.link"
   ],
   "issuerEndpoint": "https://acme-v02.api.letsencrypt.org/directory",
   "issuerEmail": "twplatformlabs@gmail.com"

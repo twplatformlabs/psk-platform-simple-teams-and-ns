@@ -11,13 +11,7 @@
     "qa.twplatformlabs.org",
     "qa.twplatformlabs.link",
     "api.twplatformlabs.org",
-    "api.twplatformlabs.link",
-    "dev.twdps.digital",
-    "dev.twdps.io",
-    "qa.twdps.digital",
-    "qa.twdps.io",
-    "api.twdps.digital",
-    "api.twdps.io"
+    "api.twplatformlabs.link"
   ],
   "issuerEndpoint": "https://acme-v02.api.letsencrypt.org/directory",
   "issuerEmail": "twplatformlabs@gmail.com"
